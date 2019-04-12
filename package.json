@@ -30,5 +30,14 @@
   },
   "files": [
     "index.js"
+  ],
+  "keywords": [
+    "mysql",
+    "mysql2",
+    "timeout"
+  ],
+  "contributors": [
+    "Chris Watson (https://github.com/c24w)",
+    "Sophie Cooper (https://github.com/scooper91)"
   ]
 }
