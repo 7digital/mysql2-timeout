@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   test: &test
-    image: node:10-alpine
+    image: node:8.3.0-alpine
     links:
       - test-db
     volumes:
