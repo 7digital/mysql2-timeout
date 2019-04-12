@@ -2,6 +2,12 @@
 
 A wrapper for [`mysql2`] connection pool `query` to support `acquireTimeout` and `queryTimeout` options.
 
+## Installation
+
+```shell
+npm install mysql2 mysql2-timeout
+```
+
 ## Usage
 
 Just use this instead of `mysql2` and call `connect` passing `queryTimeout` and `acquireTimeout` millisecond values.  If not passed, each will default to 10 seconds.  All other options will be passed directly to `mysql2`.
@@ -18,7 +24,7 @@ This only exposes the `mysql2` connection pool promise interface.
 ### Example
 
 ```javascript
-const database = require('.');
+const database = require('mysql2-timeout');
 
 async function main() {
   const db = await database.connect({
