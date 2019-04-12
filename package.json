@@ -1,6 +1,6 @@
 {
   "name": "mysql2-timeout",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A wrapper for mysql2 connection pool query to support acquireTimeout and queryTimeout options",
   "scripts": {
     "watch": "nodemon -q -x 'npm -s run lint && npm -s test'",
