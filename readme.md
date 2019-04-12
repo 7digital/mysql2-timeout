@@ -13,7 +13,7 @@ A wrapper for [`mysql2`] connection pool `query` to support `acquireTimeout` and
 ## Installation
 
 ```shell
-npm install mysql2 mysql2-timeout
+npm install mysql2 @7digital/mysql2-timeout
 ```
 
 ## Usage
@@ -32,7 +32,7 @@ This only exposes the `mysql2` connection pool promise interface.
 ### Example
 
 ```javascript
-const database = require('mysql2-timeout');
+const database = require('@7digital/mysql2-timeout');
 
 async function main() {
   const db = await database.connect({
