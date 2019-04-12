@@ -1,0 +1,31 @@
+{
+  "name": "mysql2-timeout",
+  "version": "0.0.0",
+  "description": "A wrapper for mysql2 connection pool query to support acquireTimeout and queryTimeout options",
+  "scripts": {
+    "watch": "nodemon -q -x 'npm -s run lint && npm -s test'",
+    "test": "mocha",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/7digital/mysql2-timeout"
+  },
+  "author": "7digital",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/7digital/mysql2-timeout/issues"
+  },
+  "homepage": "https://github.com/7digital/mysql2-timeout#readme",
+  "devDependencies": {
+    "chai": "*",
+    "eslint": "*",
+    "mocha": "*",
+    "mysql2": "1.x.x",
+    "nodemon": "*",
+    "wait-on": "*"
+  },
+  "peerDependencies": {
+    "mysql2": "1.x.x"
+  }
+}

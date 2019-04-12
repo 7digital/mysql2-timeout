@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  test: &test
+    image: node:10-alpine
+    links:
+      - test-db
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >-
+      sh -c '
+        set -e
+        npm -s i
+        ./node_modules/.bin/wait-on -l -t 30000 -i 500 -w 1000 tcp:test-db:3306
+        npm -s test'
+
+  watch:
+    <<: *test
+    command: >-
+      sh -c '
+        set -e
+        npm -s install
+        ./node_modules/.bin/wait-on -l -t 30000 -i 500 -w 1000 tcp:test-db:3306
+        npm -s run watch'
+
+  test-db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=test
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
