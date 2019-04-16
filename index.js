@@ -1,7 +1,6 @@
 'use strict';
 const {createPoolPromise} = require('mysql2');
 const delay = require('util').promisify(setTimeout);
-let pool;
 
 class DatabaseTimeout extends Error {
   constructor(operation, ms) {
@@ -46,7 +45,7 @@ function queryWithTimeout(options, getConnection, query) {
 async function connect({
   acquireTimeout = 10000, queryTimeout = 10000, ...options
 }) {
-  pool = pool || await createPoolPromise(options);
+  const pool = await createPoolPromise(options);
 
   pool.query = queryWithTimeout(
     { acquireTimeout, queryTimeout },
