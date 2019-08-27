@@ -13,7 +13,7 @@ services:
         set -e
         npm -s i
         ./node_modules/.bin/wait-on -l -t 30000 -i 500 -w 1000 tcp:test-db:3306
-        npm -s test'
+        npm -s run lint-and-test'
 
   watch:
     <<: *test

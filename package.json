@@ -6,9 +6,10 @@
   },
   "description": "A wrapper for mysql2 connection pool query to support acquireTimeout and queryTimeout options",
   "scripts": {
-    "watch": "nodemon -q -x 'npm -s run lint && npm -s test'",
+    "lint": "eslint .",
     "test": "mocha",
-    "lint": "eslint ."
+    "lint-and-test": "npm -s run lint && npm -s test",
+    "watch": "nodemon -q -x 'npm -s run lint-and-test'"
   },
   "repository": {
     "type": "git",
