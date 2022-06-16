@@ -25,12 +25,12 @@
     "chai": "*",
     "eslint": "*",
     "mocha": "*",
-    "mysql2": "1.x.x",
+    "mysql2": "2.x.x",
     "nodemon": "*",
     "wait-on": "*"
   },
   "peerDependencies": {
-    "mysql2": "1.x.x"
+    "mysql2": ">=1 <3"
   },
   "files": [
     "index.js"
