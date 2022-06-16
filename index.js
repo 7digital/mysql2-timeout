@@ -19,16 +19,21 @@ function kill(connection, query) {
 }
 
 function queryWithTimeout(options, getConnection, query) {
-  return async (...args) => {
+  return async (firstArg, ...otherArgs) => {
     const connection = await Promise.race([
       getConnection(),
       timeout('connect', options.acquireTimeout)
     ]);
 
+    let queryTimeout = options.defaultQueryTimeout;
+    if (typeof firstArg === 'object') {
+      ({ timeout: queryTimeout, ...firstArg } = firstArg);
+    }
+
     try {
       return await Promise.race([
-        connection.query(...args),
-        timeout('query', options.queryTimeout)
+        connection.query(firstArg, ...otherArgs),
+        timeout('query', queryTimeout)
       ]);
     } catch (err) {
       if (err instanceof DatabaseTimeout) {
@@ -43,12 +48,12 @@ function queryWithTimeout(options, getConnection, query) {
 }
 
 async function connect({
-  acquireTimeout = 10000, queryTimeout = 10000, ...options
+  acquireTimeout = 10000, defaultQueryTimeout = 10000, ...options
 }) {
   const pool = await createPoolPromise(options);
 
   pool.query = queryWithTimeout(
-    { acquireTimeout, queryTimeout },
+    { acquireTimeout, defaultQueryTimeout },
     pool.getConnection.bind(pool),
     pool.query.bind(pool)
   );

@@ -42,16 +42,16 @@ describe('database', () => {
     });
   });
 
-  describe('when the query times out', () => {
+  describe('when the default query timeout is reached', () => {
     let queryError, queryDuration;
-    const queryTimeout = 500;
+    const defaultQueryTimeout = 500;
 
     beforeEach(async () => {
       db = await database.connect({
         host: 'test-db',
         user: 'root',
         connectionLimit: 1,
-        queryTimeout
+        defaultQueryTimeout
       });
 
       const start = new Date();
@@ -65,8 +65,48 @@ describe('database', () => {
       assert(queryError, 'query didn\'t error');
       assert.equal(queryError.message, 'Database query timed out after 500ms');
 
-      assert.isAtLeast(queryDuration, queryTimeout);
-      assert.isAtMost(queryDuration, queryTimeout + 100); // 100ms grace
+      assert.isAtLeast(queryDuration, defaultQueryTimeout);
+      assert.isAtMost(queryDuration, defaultQueryTimeout + 100); // 100ms grace
+    });
+
+    it('kills the query', async () => {
+      const [queries] = await db.query('SHOW PROCESSLIST');
+      const isRunning = queries.some(q => /timeout please/.test(q.Info));
+      assert.isFalse(isRunning, 'query still running');
+    });
+
+    it('frees-up the connection', async () => {
+      assert.isDefined(await db.query('SELECT 1'));
+    });
+  });
+
+  describe('when the query timeout override is reached', () => {
+    let queryError, queryDuration;
+    const timeout = 500;
+
+    beforeEach(async () => {
+      db = await database.connect({
+        host: 'test-db',
+        user: 'root',
+        connectionLimit: 1,
+        defaultQueryTimeout: 100
+      });
+
+      const start = new Date();
+      try {
+        await db.query({ sql: 'DO SLEEP(5) -- timeout please', timeout });
+      }
+      catch (e) { queryError = e; }
+      queryDuration = new Date() - start;
+      await delay(250); // Give some time for fire-and-forget actions to finish
+    });
+
+    it('errors', () => {
+      assert(queryError, 'query didn\'t error');
+      assert.equal(queryError.message, 'Database query timed out after 500ms');
+
+      assert.isAtLeast(queryDuration, timeout);
+      assert.isAtMost(queryDuration, timeout + 100); // 100ms grace
     });
 
     it('kills the query', async () => {
@@ -88,7 +128,7 @@ describe('database', () => {
       db = await database.connect({
         host: 'test-db',
         user: 'root',
-        queryTimeout: 10000,
+        defaultQueryTimeout: 10000,
         acquireTimeout,
         connectionLimit: 1
       });
