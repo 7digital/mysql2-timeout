@@ -4,7 +4,6 @@
 
 ---
 
-[![Travis CI](https://img.shields.io/travis/7digital/mysql2-timeout.svg?style=flat-square)](https://travis-ci.org/7digital/mysql2-timeout 'Build')
 [![npm](https://img.shields.io/npm/v/@7digital/mysql2-timeout.svg?style=flat-square)](https://www.npmjs.com/package/@7digital/mysql2-timeout 'npm')
 [![Node.js Version](https://img.shields.io/node/v/@7digital/mysql2-timeout.svg?style=flat-square 'Node.js Version')](#)
 

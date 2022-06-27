@@ -1,0 +1,17 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '*.md'
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v2
+      - run: docker-compose run test
