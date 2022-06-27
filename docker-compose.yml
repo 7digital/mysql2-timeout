@@ -1,10 +1,11 @@
-version: '3.4'
+version: '2'
 
 services:
   test: &test
     image: node:8.3.0-alpine
-    links:
-      - test-db
+    depends_on:
+      test-db:
+        condition: service_healthy
     volumes:
       - .:/app
     working_dir: /app
@@ -12,7 +13,6 @@ services:
       sh -c '
         set -e
         npm -s i
-        ./node_modules/.bin/wait-on -l -t 30000 -i 500 -w 1000 tcp:test-db:3306
         npm -s run lint-and-test'
 
   watch:
@@ -21,7 +21,6 @@ services:
       sh -c '
         set -e
         npm -s install
-        ./node_modules/.bin/wait-on -l -t 30000 -i 500 -w 1000 tcp:test-db:3306
         npm -s run watch'
 
   test-db:
@@ -29,3 +28,8 @@ services:
     environment:
       - MYSQL_DATABASE=test
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    healthcheck:
+      test: '/usr/bin/mysql -D test -u root --execute "SELECT 1"'
+      interval: 1s
+      timeout: 1s
+      retries: 20
