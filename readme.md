@@ -4,6 +4,7 @@
 
 ---
 
+[![Test](https://github.com/7digital/mysql2-timeout/actions/workflows/test.yml/badge.svg)](https://github.com/7digital/mysql2-timeout/actions/workflows/test.yml)
 [![npm](https://img.shields.io/npm/v/@7digital/mysql2-timeout.svg?style=flat-square)](https://www.npmjs.com/package/@7digital/mysql2-timeout 'npm')
 [![Node.js Version](https://img.shields.io/node/v/@7digital/mysql2-timeout.svg?style=flat-square 'Node.js Version')](#)
 
