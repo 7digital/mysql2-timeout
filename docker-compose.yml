@@ -10,11 +10,11 @@ services:
       - .:/app
     working_dir: /app
     user: $HOST_UID
-    command: sh -c 'npm -s i && npm -s run lint-and-test'
+    command: sh -c 'npm i && npm run lint-and-test'
 
   watch:
     <<: *test
-    command: sh -c 'npm -s i && npm -s run watch'
+    command: sh -c 'npm i && npm run watch'
 
   test-db:
     image: mysql:5.7
