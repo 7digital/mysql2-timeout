@@ -52,12 +52,17 @@ async function main() {
 
 ## Developing
 
-### `docker-compose run test`
+Requirements:
+ - Node.js (see [package.json](./package.json) for version)
+ - Docker
+ - Docker Compose
 
-Runs the tests once.
+### `make test`
 
-### `docker-compose run watch`
+Spins up database and test containers, runs the tests once, and then stops the containers.
 
-Runs the tests when the source or tests change.
+### `make watch`
+
+Spins up database and test containers, and runs the tests whenever the source or tests change.
 
 [`mysql2`]: https://github.com/sidorares/node-mysql2
