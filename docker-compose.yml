@@ -2,13 +2,14 @@ version: '2'
 
 services:
   test: &test
-    image: node:8.3.0-alpine
+    image: node:16-alpine
     depends_on:
       test-db:
         condition: service_healthy
     volumes:
       - .:/app
     working_dir: /app
+    user: $HOST_UID
     command: sh -c 'npm -s i && npm -s run lint-and-test'
 
   watch:

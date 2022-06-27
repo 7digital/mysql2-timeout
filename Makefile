@@ -10,6 +10,8 @@ define docker-compose-run
 	(exit $$exit_status)
 endef
 
+export HOST_UID = $(shell id -u)
+
 test:
 	$(call docker-compose-run, test)
 .PHONY: test
