@@ -26,7 +26,7 @@
     "eslint": "*",
     "mocha": "*",
     "mysql2": "2.x.x",
-    "nodemon": "*"
+    "nodemon": "^2.0.18"
   },
   "peerDependencies": {
     "mysql2": ">=1 <3"
