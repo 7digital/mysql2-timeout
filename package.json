@@ -23,7 +23,7 @@
   "homepage": "https://github.com/7digital/mysql2-timeout#readme",
   "devDependencies": {
     "chai": "*",
-    "eslint": "*",
+    "eslint": "^8.18.0",
     "mocha": "*",
     "mysql2": "2.x.x",
     "nodemon": "^2.0.18"
