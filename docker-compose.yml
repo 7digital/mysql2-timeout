@@ -2,14 +2,18 @@ version: '2'
 
 services:
   test: &test
-    image: node:16.15.0-alpine
+    image: node:16.15.1-alpine
     depends_on:
       test-db:
         condition: service_healthy
     volumes:
       - .:/app
     working_dir: /app
-    user: $HOST_UID
+    entrypoint: |-
+      sh -ceuo pipefail '
+        apk add shadow
+        usermod -u $HOST_UID node
+        su node -c "$$@"'
     command: sh -c 'npm i && npm run lint-and-test'
 
   watch:
