@@ -22,6 +22,9 @@ services:
 
   test-db:
     image: mysql:5.7
+    logging:
+      options:
+        max-size: 10k # Keep down the noise
     ulimits:
       nofile:
         soft: 1024
