@@ -18,12 +18,23 @@ function kill(connection, query) {
   query('KILL ' + connection.escape(connection.connection.threadId));
 }
 
+async function getConnectionWithTimeout(getConnection, timeoutMs) {
+  const gettingConnection = getConnection();
+  try {
+    return await Promise.race([
+      gettingConnection,
+      timeout('connect', timeoutMs)
+    ]);
+  } catch (err) {
+    gettingConnection.then(conn => conn.release()).catch(() => {});
+    throw err;
+  }
+}
+
 function queryWithTimeout(options, getConnection, query) {
   return async (firstArg, ...otherArgs) => {
-    const connection = await Promise.race([
-      getConnection(),
-      timeout('connect', options.acquireTimeout)
-    ]);
+
+    const connection = await getConnectionWithTimeout(getConnection, options.acquireTimeout);
 
     let queryTimeout = options.defaultQueryTimeout;
     if (typeof firstArg === 'object') {

@@ -120,8 +120,8 @@ describe('database', () => {
     });
   });
 
-  describe('when all connections are in use', () => {
-    let queryError, queryDuration;
+  describe('when querying while all connections are in use', () => {
+    let queryError, queryDuration, connectionHog, queuedQuery;
     const acquireTimeout = 500;
 
     beforeEach(async () => {
@@ -133,7 +133,38 @@ describe('database', () => {
         connectionLimit: 1
       });
 
-      db.query('DO SLEEP(5)'); // Hog the only available connection
+      connectionHog = db.query('DO SLEEP(2)'); // Hog the only available connection
+
+      db.once('enqueue', () => queuedQuery = true);
+      const start = new Date();
+      try { await db.query('SELECT 1'); } // Query while connection is hogged
+      catch (e) { queryError = e; }
+      queryDuration = new Date() - start;
+    });
+
+    it('times out getting a connection', () => {
+      assert(queryError, 'query didn\'t error');
+      assert.equal(queryError.message, 'Database connect timed out after 500ms');
+
+      assert.isAtLeast(queryDuration, acquireTimeout - 1); // Sometimes comes in early?!
+      assert.isAtMost(queryDuration, acquireTimeout + 100); // 100ms grace
+    });
+
+    it('makes the timed out connection available for use', async () => {
+      assert.isTrue(queuedQuery, 'Timed out query was not queued');
+      await connectionHog;
+      assert.isDefined(await db.query('SELECT 1'));
+    }).timeout(5000);
+  });
+
+  describe('when acquiring the connection times out', () => {
+    let queryError, badDbServer, queryDuration;
+    const acquireTimeout = 500;
+
+    beforeEach(async () => {
+      badDbServer = require('net').createServer().listen(3306);
+
+      db = await database.connect({ acquireTimeout });
 
       const start = new Date();
       try { await db.query('SELECT 1'); }
@@ -141,12 +172,33 @@ describe('database', () => {
       queryDuration = new Date() - start;
     });
 
-    it('times out', async () => {
+    afterEach(function (done) {
+      this.timeout(10000);
+      if (badDbServer.listening) { badDbServer.close(done); }
+      else { done(); }
+    });
+
+    it('times out', () => {
       assert(queryError, 'query didn\'t error');
       assert.equal(queryError.message, 'Database connect timed out after 500ms');
 
       assert.isAtLeast(queryDuration, acquireTimeout - 1); // Sometimes comes in early?!
       assert.isAtMost(queryDuration, acquireTimeout + 100); // 100ms grace
+    });
+
+    describe('when the connection then errors', () => {
+      let connError;
+      const unhandledError = err => connError = err;
+      beforeEach(() => process.once('unhandledRejection', unhandledError));
+      afterEach(() => process.off('unhandledRejection', unhandledError));
+
+      it('swallows the connection error', done => {
+        badDbServer.close(() => {
+          if (connError) { assert.fail(`Did not expect an error, but got '${connError}'`); }
+
+          done();
+        });
+      }).timeout(10000);
     });
   });
 
