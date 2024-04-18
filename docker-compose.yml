@@ -1,6 +1,6 @@
 services:
   test: &test
-    image: node:16.15.1-alpine
+    image: node:20.12.2-alpine3.19
     depends_on:
       test-db:
         condition: service_healthy
