@@ -1,13 +1,13 @@
 'use strict';
-const {assert} = require('chai');
-const delay = require('util').promisify(setTimeout);
+import { assert } from 'chai';
+import { setTimeout as delay } from 'node:timers/promises';
+import net from 'node:net';
 
 describe('database', () => {
   let database, db;
 
-  beforeEach(() => {
-    delete require.cache[require.resolve('.')];
-    database = require('.');
+  beforeEach(async () => {
+    database = await import(`./index.js?cache-bust=${Date.now()}`);
     db = undefined;
   });
 
@@ -21,7 +21,7 @@ describe('database', () => {
     const connectTimeout = 500;
 
     beforeEach(async () => {
-      badDbServer = require('net').createServer().listen(3306);
+      badDbServer = net.createServer().listen(3306);
 
       db = await database.connect({ connectTimeout });
 
@@ -162,7 +162,7 @@ describe('database', () => {
     const acquireTimeout = 500;
 
     beforeEach(async () => {
-      badDbServer = require('net').createServer().listen(3306);
+      badDbServer = net.createServer().listen(3306);
 
       db = await database.connect({ acquireTimeout });
 

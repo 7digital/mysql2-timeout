@@ -23,5 +23,12 @@ export default [
       semi: [ 'error', 'always' ],
       'no-console': 'off'
     }
+  },
+  {
+    files: ['*.mjs'],
+    languageOptions: {
+      ecmaVersion: 2023,
+      sourceType: 'module'
+    }
   }
 ];
