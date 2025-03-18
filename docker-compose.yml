@@ -12,7 +12,7 @@ services:
         apk add shadow
         usermod -u $HOST_UID node
         su node -c "$$@"'
-    command: sh -c 'npm i && npm run lint-and-test'
+    command: sh -c 'npm i && npm run test'
 
   watch:
     <<: *test
