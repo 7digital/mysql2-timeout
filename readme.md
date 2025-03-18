@@ -1,6 +1,6 @@
 # MySQL2 Timeout
 
-[![7digital](https://i.imgur.com/StUnvCy.png)](http://about.7digital.com '7digital')
+[![7digital](https://i.imgur.com/StUnvCy.png)](https://www.7digital.com)
 
 ---
 
