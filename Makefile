@@ -12,6 +12,9 @@ endef
 
 export HOST_UID = $(shell id -u)
 
+lint:
+	$(call docker-compose-run, lint)
+
 test:
 	$(call docker-compose-run, test)
 .PHONY: test
