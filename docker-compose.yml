@@ -28,8 +28,8 @@ services:
         soft: 1024
         hard: 1024
     environment:
-      - MYSQL_DATABASE=test
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      MYSQL_DATABASE: test
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
     healthcheck:
       test: '/usr/bin/mysql -D test -u root --execute "SELECT 1"'
       interval: 1s
