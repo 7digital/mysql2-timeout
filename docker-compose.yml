@@ -4,6 +4,11 @@ services:
     volumes:
       - .:/app
     working_dir: /app
+    entrypoint: |-
+      sh -ceuo pipefail '
+        apk add shadow
+        usermod -u $HOST_UID node
+        su node -c "$$@"'
     command: sh -c 'npm i --no-save eslint && ./node_modules/.bin/eslint --color .'
 
   test: &test
