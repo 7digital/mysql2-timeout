@@ -27,6 +27,7 @@ services:
 
   test-db:
     image: mysql:8.3.0
+    stop_signal: SIGKILL
     logging:
       options:
         max-size: 10k # Keep down the noise
