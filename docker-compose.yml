@@ -31,7 +31,7 @@ services:
     command: sh -c 'npm i && npm run watch'
 
   test-db:
-    image: mysql:8.3.0
+    image: mysql:9.5.0
     stop_signal: SIGKILL
     logging:
       options:
